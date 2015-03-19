@@ -1,13 +1,17 @@
 package com.objectivelyradical.creepycrawler;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -17,52 +21,6 @@ import java.util.Collections;
 
 public class SearchActivity extends ActionBarActivity {
 
-    private static ArrayList<CreepyPasta> creepyPasta;
-    private static ArrayList<String> categories = new ArrayList<String>() {
-        {
-            add("Animals");
-            add("Beings");
-            add("Books");
-            add("Computers and Internet");
-            add("Cryptids");
-            add("Demon/Devil");
-            add("Diary/Journal");
-            add("Disappearances");
-            add("Dismemberment");
-            add("Dreams/Sleep");
-            add("Ghosts");
-            add("Gods");
-            add("Halloween");
-            add("History");
-            add("Holders");
-            add("Items/Objects");
-            add("Lost Episodes");
-            add("Lovecraftian");
-            add("Memes");
-            add("Mental Illness");
-            add("Military");
-            add("Mirrors");
-            add("Monsters");
-            add("Music");
-            add("NSFW");
-            add("Nature");
-            add("Photography");
-            add("Places");
-            add("Poetry");
-            add("Pokemon");
-            add("Reality");
-            add("Ritual");
-            add("Science Pastas");
-            add("Space");
-            add("Television");
-            add("Theory");
-            add("Troll Pasta");
-            add("Video Games");
-            add("Videos");
-            add("Weird");
-            add("Zelda");
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +38,12 @@ public class SearchActivity extends ActionBarActivity {
     }
 
     private void loadCreepyPasta() {
+        if(Globals.creepyPasta != null) return;
         try {
 
             InputStream is = getAssets().open("cookedpasta.cc");
             ObjectInputStream ois = new ObjectInputStream(is);
-            creepyPasta = (ArrayList<CreepyPasta>)ois.readObject();
+            Globals.creepyPasta = (ArrayList<CreepyPasta>)ois.readObject();
 
             is.close();
             System.out.println("Loaded pasta successfully!");
@@ -95,12 +54,14 @@ public class SearchActivity extends ActionBarActivity {
     }
 
     private void generateCategoryCheckboxes() {
-       LinearLayout layout = (LinearLayout)findViewById(R.id.categoryViewGroup);
+       GridLayout layout = (GridLayout)findViewById(R.id.categoryViewGroup);
 
-        for(String category : categories) {
+        for(String category : Globals.categories) {
             CategoryCheckBox cb = new CategoryCheckBox(getBaseContext(), category);
             layout.addView(cb);
+            cb.setTextColor(((TextView) findViewById(R.id.pastaNameLabel)).getCurrentTextColor());
         }
+
     }
 
 
@@ -124,5 +85,23 @@ public class SearchActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void searchButtonClicked(View button) {
+        Intent intent = new Intent(this, ResultActivity.class);
+        intent.putExtra("NAME", ((EditText)findViewById(R.id.pastaName)).getText().toString());
+        intent.putExtra("MIN_WORDS", ((EditText)findViewById(R.id.minWordCount)).getText().toString());
+        intent.putExtra("MAX_WORDS", ((EditText)findViewById(R.id.maxWordCount)).getText().toString());
+        ArrayList<String> selectedCategories = new ArrayList<String>();
+        GridLayout layout = (GridLayout)findViewById(R.id.categoryViewGroup);
+        for(int i = 0; i < layout.getChildCount(); i++) {
+            CheckBox box = (CheckBox)layout.getChildAt(i);
+            if(box.isChecked()) {
+                selectedCategories.add(box.getText().toString());
+            }
+        }
+        System.out.println("SELECTED CATEGORIES: " + selectedCategories.size());
+        intent.putStringArrayListExtra("SELECTED_CATEGORIES", selectedCategories);
+        startActivity(intent);
     }
 }

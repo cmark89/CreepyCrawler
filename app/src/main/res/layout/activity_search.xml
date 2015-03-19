@@ -24,17 +24,18 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Pasta Name"
-                android:id="@+id/textView" />
+                android:id="@+id/pastaNameLabel" />
 
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText"
+                android:id="@+id/pastaName"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 style="@style/AppTheme"
                 android:background="@android:drawable/editbox_background_normal"
-                android:autoText="false" />
+                android:autoText="false"
+                android:singleLine="true" />
         </LinearLayout>
 
         <Space
@@ -78,9 +79,10 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
-                android:id="@+id/editText2"
+                android:id="@+id/minWordCount"
                 android:layout_weight=".4"
-                android:background="@android:drawable/editbox_background_normal" />
+                android:background="@android:drawable/editbox_background_normal"
+                android:singleLine="true" />
 
             <Space
                 android:layout_width="20px"
@@ -91,22 +93,31 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
-                android:id="@+id/editText3"
+                android:id="@+id/maxWordCount"
                 android:layout_weight=".4"
-                android:background="@android:drawable/editbox_background_normal" />
+                android:background="@android:drawable/editbox_background_normal"
+                android:singleLine="true" />
         </LinearLayout>
 
         <Space
             android:layout_width="20px"
             android:layout_height="20px" />
 
-        <LinearLayout
-            android:orientation="vertical"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Categories"
+            android:id="@+id/textView"
+            android:layout_gravity="center_horizontal" />
+
+        <GridLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:columnCount="2"
             android:id="@+id/categoryViewGroup">
 
-        </LinearLayout>
+        </GridLayout>
 
         <Space
             android:layout_width="20px"
@@ -116,7 +127,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Search"
-            android:id="@+id/button" />
+            android:id="@+id/button"
+            android:layout_gravity="center_horizontal"
+            android:onClick="searchButtonClicked"
+            android:nestedScrollingEnabled="false" />
 
     </LinearLayout>
 
