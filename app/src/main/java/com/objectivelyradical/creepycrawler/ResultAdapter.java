@@ -51,13 +51,9 @@ public class ResultAdapter extends BaseAdapter {
 
         CreepyPasta thisPasta = getItem(position);
         pastaName.setText(thisPasta.getTitle());
-        if(wordCount == null)
-            System.out.println("WORD COUNT IS NULL");
-        if(thisPasta == null)
-            System.out.println("PASTA IS NULL");
         wordCount.setText(Integer.toString(thisPasta.getWordCount()));
 
-        ArrayList<String> cats = thisPasta.getCategories();
+        ArrayList<String> cats = new ArrayList<String>(thisPasta.getCategories());
         String temp = "";
         for(int i = 0; i < categoryGrid.getChildCount(); i++) {
             // Don't consider the same category more than once:
